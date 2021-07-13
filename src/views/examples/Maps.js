@@ -16,9 +16,14 @@ const Maps = () => {
   const [busesData,setBusesData] = React.useState([])
   React.useEffect(()=>{
     const fetchDash =async()=>{
+      try{
       const {data} = await axios.get("http://localhost:3001/dashtics/buses")
       
       setBusesData(data?.busesData)
+      }
+      catch(error){
+        console.log(error)
+      }
     }
     fetchDash()
   },[])

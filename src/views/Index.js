@@ -46,12 +46,14 @@ const Index = (props) => {
   const [editBus, setEditBus] = useState("")
   const [editStudent, setEditStudent] = useState("")
   const [editDriver, setEditDriver] = useState("")
+  const [busStartTime,setBusStartTime] = useState("")
+  const [busEndTime,setBusEndTime] = useState("")
   useEffect(() => {
     const fetchDash = async () => {
       const { data } = await axios.get("http://localhost:3001/dashtics/buses")
       const students = await axios.get("http://localhost:3001/dashtics/students");
       const drivers = await axios.get("http://localhost:3001/dashtics/drivers");
-      // console.log(drivers.data)
+      console.log(drivers)
       setBusesData(data?.busesData)
       setStudentsData(students?.data?.studentsData)
       setDriversData(drivers?.data);
@@ -68,16 +70,15 @@ const Index = (props) => {
 
   
   // console.log(busesData)
-  const updateBusNumber = async (id) => {
-    console.log(id)
-    console.log(editBus)
+  const updateBusNumber = async () => {
     try {
       await axios.post(`http://localhost:3001/dashtics/buses`, {
         id: editBus,
-        busId: id
+        busStartTime,
+        busEndTime
       })
       setBusesData(busesData.map(bus => {
-        return bus._id === editBus ? { ...bus, busNumber: id } : bus
+        return bus._id === editBus ? { ...bus, startingTime: busStartTime,endingTime:busEndTime } : bus
       }))
       setEditBus("")
     }
@@ -148,21 +149,40 @@ const Index = (props) => {
                     <th scope="col">Bus Number</th>
                     <th scope="col">Starting Point</th>
                     <th scope="col">Destination</th>
+                    <th scope="col">Timing</th>
                     <th scope="col">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
                   {
                     busesData?.map(bus => {
+                      console.log(bus)
                       return <tr>
                         <td>
-                          {editBus === bus?._id ?
+                          {/* {editBus === bus?._id ?
                             <input type="text" onBlur={(e) => updateBusNumber(e.target.value)} />
-                            :
-                            bus?.busNumber}
+                            : */}
+                            {bus?.busNumber}
                         </td>
                         <td>{bus?.startingAddress}</td>
                         <td>{bus?.endingAddress}</td>
+
+                        <td>
+                        {editBus === bus?._id ?
+                          <>
+                            <input type="time" onChange={(e) => setBusStartTime(e.target.value)} />
+                            <input type="time" onBlur={(e) => setBusEndTime(e.target.value)} />
+                            <button onClick={(e) => updateBusNumber()} >
+                              Confirm
+                            </button>
+                          </>  
+                            :
+                            <>
+                            {bus?.startingTime} to 
+                            {bus?.endingTime}
+                            </>
+                        }
+                        </td>
                         <td><button onClick={() => setEditBus(bus?._id)} >Edit</button></td>
                       </tr>
                     })

@@ -1,6 +1,7 @@
 
-import React from "react";
-
+import React,{useState} from "react";
+import axios from 'axios'
+import {withRouter} from 'react-router-dom'
 // reactstrap components
 import {
   Button,
@@ -17,7 +18,24 @@ import {
   Col,
 } from "reactstrap";
 
-const Login = () => {
+const Login = (props) => {
+
+  const [email,setEmail] = useState("")
+  const [password,setPassword] = useState("")
+  
+  const submitSignin =async()=>{
+    console.log(email,password)
+    try {
+      await axios.post(`http://localhost:3001/api/adminLogin`, {
+        email,password
+      })
+      props.history.push('/admin/index')
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+  
   return (
     <>
       <Col lg="5" md="7">
@@ -36,6 +54,7 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    onChange={(e)=>setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -50,6 +69,7 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    onChange={(e)=>setPassword(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -67,7 +87,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="button" onClick={submitSignin}>
                   Sign in
                 </Button>
               </div>
@@ -87,8 +107,7 @@ const Login = () => {
           <Col className="text-right" xs="6">
             <a
               className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
+              href="/auth/register"
             >
               <small>Create new account</small>
             </a>
