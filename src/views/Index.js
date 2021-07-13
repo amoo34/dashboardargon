@@ -254,7 +254,7 @@ const Index = (props) => {
                               {
                                 busesData.map((bus, i) => {
                                   return (
-                                    <option value={bus.busNumber} key={i} selected={bus.busNumber === driver.bussNo} disabled={assignedBusses.length > 0 && assignedBusses.filter((a,i)=> a.bussNo === bus.busNumber)}>{bus.busNumber}</option>
+                                    <option value={bus.busNumber} key={i} selected={bus.busNumber === driver.bussNo} >{bus.busNumber}</option>
                                   )
                                 })
                               }
