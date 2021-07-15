@@ -14,13 +14,13 @@ const Maps = () => {
     height: '500px'
   };
   const [busesData,setBusesData] = React.useState([])
-  React.useEffect(()=>{
-    const fetchDash =async()=>{
+  React.useEffect(async ()=>{
+    // const fetchDash =async()=>{
       const {data} = await axios.get("http://localhost:3001/dashtics/buses")
       
       setBusesData(data?.busesData)
-    }
-    fetchDash()
+    // }
+    // fetchDash()
   },[])
 
   return (
@@ -43,10 +43,11 @@ const Maps = () => {
                 >
                   { /* Child components, such as markers, info windows, etc. */ }
                   {
-                    busesData?.map(bus=>{
+                    busesData?.map((bus,idx)=>{
                       console.log(bus)
                       return <Marker
-                      title="Bus Number"
+                      key={idx}
+                      title="Bus Number "
                       name={'Dolores park'}
                       position={{lat:parseFloat(bus?.startingPoint?.lat),lng:parseFloat(bus?.startingPoint?.lng)}}
                       />
