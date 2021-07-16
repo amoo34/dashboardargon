@@ -55,23 +55,7 @@ const Index = (props) => {
   },[])
 
   // console.log(busesData)
-  const updateBusNumber =async(id)=>{
-    console.log(id)
-    console.log(editBus)
-    try{
-     await axios.post(`http://localhost:3001/dashtics/buses`,{
-       id:editBus,
-      busId:id
-     })
-      setBusesData(busesData.map(bus=>{
-        return bus._id === editBus ? { ...bus ,busNumber:id} : bus 
-      }))
-      setEditBus("")
-    }
-    catch(error){
-      console.log(error)
-    }
-    }
+ 
 
     const updateStudentNumber =async(regNumber)=>{
       console.log(regNumber)
@@ -95,82 +79,6 @@ const Index = (props) => {
     <>
       <Header />
       {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="12">
-            <Card className="shadow">
-              <CardHeader className="border-0">
-                <b>  Buses Data </b>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Bus Number</th>
-                    <th scope="col">Starting Point</th>
-                    <th scope="col">Destination</th>
-                    <th scope="col">Edit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                     busesData?.map(bus=>{
-                       return <tr>
-                       <td>
-                         {editBus === bus?._id ?
-                         <input type="text" onBlur={(e)=>updateBusNumber(e.target.value)} />
-                         : 
-                         bus?.busNumber}
-                         </td>
-                       <td>{bus?.startingAddress}</td>
-                       <td>{bus?.endingAddress}</td>
-                       <td><button onClick={()=>setEditBus(bus?._id)} >Edit</button></td>
-                     </tr>
-                     })
-                  }
-                  
-                </tbody>
-              </Table>
-            </Card>
-          </Col>
-        
-          <Col className="mb-5 mt-4 mb-xl-0" xl="12">
-            <Card className="shadow">
-              <CardHeader className="border-0">
-                <b>  Students Data </b>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Register Number</th>
-                    <th scope="col">CNIC</th>
-                    <th scope="col">FEE Paid</th>
-                    <th scope="col">Edit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                     studentsData?.map(bus=>{
-                       return <tr>
-                       <td>
-                         {editStudent === bus?._id ?
-                         <input type="text" onBlur={(e)=>updateStudentNumber(e.target.value)} />
-                         : 
-                         bus?.regNumber}
-                         </td>
-                       <td>{bus?.nic}</td>
-                       <td>{bus?.isfee}</td>
-                       <td><button onClick={()=>setEditStudent(bus?._id)} >Edit</button></td>
-                     </tr>
-                     })
-                  }
-                  
-                </tbody>
-              </Table>
-            </Card>
-          </Col>
-        
-        </Row>
-      </Container>
     </>
   );
 };

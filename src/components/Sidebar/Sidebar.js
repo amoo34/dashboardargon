@@ -55,7 +55,7 @@ const Sidebar = (props) => {
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       return (
-        <NavItem key={key}>
+        <NavItem key={key} hidden={!prop.showInSidebar}>
           <NavLink
             to={prop.layout + prop.path}
             tag={NavLinkRRD}

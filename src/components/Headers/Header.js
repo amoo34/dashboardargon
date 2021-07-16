@@ -15,43 +15,51 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React,{useEffect,useState} from "react";
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import {Link, NavLink} from 'react-router-dom'
+import axios from "axios";
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 const Header = () => {
-  const [dasticsData,setDasticsData] = useState({})
-  useEffect(()=>{
-    const fetchDash =async()=>{
-      const data = await axios.get("http://localhost:3001/dashtics")
-      setDasticsData(data)
-    }
-    fetchDash()
-  },[])
+  const [dasticsData, setDasticsData] = useState({});
+  useEffect(() => {
+    const fetchDash = async () => {
+      const data = await axios.get("http://localhost:3001/dashtics");
+      setDasticsData(data);
+    };
+    fetchDash();
+  }, []);
 
   console.log(dasticsData)
+const isShowBusses = window.location.href.includes("/showBusses");
+const isShowStudents = window.location.href.includes("/showStudents");
+const isShowDrivers = window.location.href.includes("/showDrivers");
+
+
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
         <Container fluid>
           <div className="header-body">
             {/* Card stats */}
-            <Row>
+            <Row hidden={isShowBusses || isShowStudents || isShowDrivers}>
               <Col lg="6" xl="6">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
                       <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Total Students
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {dasticsData?.data?.studentsData}
-                        </span>
+                        <NavLink tag={Link} to="/admin/showStudents">
+                          <CardTitle
+                            tag="h5"
+                            className="text-uppercase text-muted mb-0"
+                          >
+                            Total Students
+                          </CardTitle>
+                          <span className="h2 font-weight-bold mb-0">
+                            {dasticsData?.data?.studentsData}
+                          </span>
+                        </NavLink>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -67,6 +75,7 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
+                      <NavLink tag={Link} to="/admin/showBusses">
                         <CardTitle
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
@@ -76,6 +85,7 @@ const Header = () => {
                         <span className="h2 font-weight-bold mb-0">
                           {dasticsData?.data?.busesData}
                         </span>
+                        </NavLink>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -86,6 +96,37 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
+            </Row>
+<br/><br/>
+            <Row hidden={isShowBusses || isShowStudents || isShowDrivers}>
+              
+            <Col lg="6" xl="6">
+                <Card className="card-stats mb-4 mb-xl-0">
+                  <CardBody>
+                    <Row>
+                      <div className="col">
+                      <NavLink tag={Link} to="/admin/showDrivers">
+                        <CardTitle
+                          tag="h5"
+                          className="text-uppercase text-muted mb-0"
+                        >
+                          Total Drivers
+                        </CardTitle>
+                        <span className="h2 font-weight-bold mb-0">
+                          {dasticsData?.data?.driversData}
+                        </span>
+                        </NavLink>
+                      </div>
+                      <Col className="col-auto">
+                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
+                          <i className="fas fa-chart-pie" />
+                        </div>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+         
             </Row>
           </div>
         </Container>
