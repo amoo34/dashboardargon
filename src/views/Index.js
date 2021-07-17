@@ -1,5 +1,5 @@
 
-import React, { useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -9,7 +9,7 @@ import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 import Geocode from "react-geocode";
 // import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-import {API} from './googleApi'
+import { API } from './googleApi'
 import axios from 'axios'
 import {
   Button,
@@ -40,41 +40,38 @@ Geocode.enableDebug();
 
 const Index = (props) => {
   const [busesData, setBusesData] = useState([]);
-  const [studentsData,setStudentsData] = useState([])
-  const [editBus,setEditBus] = useState("")
-  const [editStudent,setEditStudent] = useState("")
-  useEffect(()=>{
-    const fetchDash =async()=>{
-      const {data} = await axios.get("http://localhost:3001/dashtics/buses")
-      const students = await axios.get("http://localhost:3001/dashtics/students")
-      
+  const [studentsData, setStudentsData] = useState([]);
+  const [driversData, setDriversData] = useState([]);
+  const [assignedBusses,setAssignedBusses] = useState([]);
+  const [editBus, setEditBus] = useState("")
+  const [editStudent, setEditStudent] = useState("")
+  const [editDriver, setEditDriver] = useState("")
+  const [busStartTime,setBusStartTime] = useState("")
+  const [busEndTime,setBusEndTime] = useState("")
+  useEffect(() => {
+    const fetchDash = async () => {
+      const { data } = await axios.get("http://localhost:3001/dashtics/buses")
+      const students = await axios.get("http://localhost:3001/dashtics/students");
+      const drivers = await axios.get("http://localhost:3001/dashtics/drivers");
+      console.log(drivers)
       setBusesData(data?.busesData)
       setStudentsData(students?.data?.studentsData)
-    }
-    fetchDash()
-  },[])
+      setDriversData(drivers?.data);
 
+     setAssignedBusses(drivers.data.filter((b,i)=>{
+       return  b.bussNo !== "null" && b.bussNo !== null  
+      }))
+
+      console.log("ALLL SET",assignedBusses)
+    }
+
+    fetchDash()
+  }, [])
+
+  
   // console.log(busesData)
  
 
-    const updateStudentNumber =async(regNumber)=>{
-      console.log(regNumber)
-      console.log(editStudent)
-      try{
-       await axios.patch(`http://localhost:3001/dashtics/students`,{
-         id:editStudent,
-         studentRegNumber:regNumber
-       })
-        setStudentsData(studentsData.map(bus=>{
-          return bus._id === editStudent ? { ...bus ,regNumber} : bus 
-        }))
-        setEditStudent("")
-      }
-      catch(error){
-        console.log(error)
-      }
-      }
-  
   return (
     <>
       <Header />

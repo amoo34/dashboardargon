@@ -18,6 +18,9 @@
 import axios from "axios";
 import React, { useState } from "react";
 
+import React,{useState} from "react";
+import axios from 'axios'
+import {withRouter} from 'react-router-dom'
 // reactstrap components
 import {
   Button,
@@ -139,6 +142,7 @@ console.log(name,email,password)
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    onChange={(e)=>setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -154,6 +158,7 @@ console.log(name,email,password)
                   onChange={(e)=>{setPassword(e.target.value)}}
                     placeholder="Password"
                     type="password"
+                    onChange={(e)=>setPassword(e.target.value)}
                     autoComplete="new-password"
                   />
                 </InputGroup>
@@ -177,12 +182,6 @@ console.log(name,email,password)
                       className="custom-control-label"
                       htmlFor="customCheckRegister"
                     >
-                      <span className="text-muted">
-                        I agree with the{" "}
-                        <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                          Privacy Policy
-                        </a>
-                      </span>
                     </label>
                   </div>
                 </Col>
@@ -200,4 +199,4 @@ console.log(name,email,password)
   );
 };
 
-export default Register;
+export default withRouter(Register);

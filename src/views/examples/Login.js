@@ -1,6 +1,7 @@
 
-import React, { useState } from "react";
 
+import React,{useState} from "react";
+import {withRouter} from 'react-router-dom'
 // reactstrap components
 import {
   Button,
@@ -65,7 +66,7 @@ const Login = () => {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
 
-  return (
+    return (
     <>
     {/* <ToastContainer /> */}
       <Col lg="5" md="7">
@@ -102,6 +103,7 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    onChange={(e)=>setPassword(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
