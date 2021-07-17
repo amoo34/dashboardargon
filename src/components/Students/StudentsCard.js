@@ -38,6 +38,9 @@ const StudentsCard = (props) => {
   const [studentsData, setStudentsData] = useState([]);
   const [editStudent, setEditStudent] = useState("");
 
+  const [studentsDataFilter, setStudentsDataFilter] = useState([]);
+  const [isFilter, setIsFilter] = useState(false);
+
   const [registerationNo,setRegisterationNo] = useState("");
   const [cnicEdit,setCNICEdit] = useState("");
   const [feeStatus,setFeeStatusEdit] = useState("");
@@ -121,7 +124,27 @@ const StudentsCard = (props) => {
     });
   };
 
+  const handleSearch = async (value) => {
+    const abc = studentsData;
+    if (value === "") {
+      const { data } = await axios.get("http://localhost:3001/dashtics/students");
+      setIsFilter(false);
+      setStudentsData(data?.studentsData);
+    } else {
+      setIsFilter(true);
+      setStudentsDataFilter(
+        studentsData.filter(
+          (bus, id) =>
+            bus?.regNumber.includes(value) ||
+            bus?.nic.includes(value) ||
+            bus?.isfee.includes(value)
+        )
+      );
+    }
+  };
+
   const toggle = () => setModal(!modal);
+  const dataToShow = isFilter ? studentsDataFilter : studentsData;
 
   return (
     <div>
@@ -196,7 +219,23 @@ const StudentsCard = (props) => {
         <Col className="mb-5 mt-4 mb-xl-0" xl="12">
           <Card className="shadow">
             <CardHeader className="border-0">
+              <Row>
+            <div className="col-md-3">
+              {" "}
               <b> Students Data </b>
+            </div>
+            <div className="col-md-6"></div>
+            <div className="col-md-3">
+              <Input
+                type="text"
+                id="search"
+                placeholder="Search Here"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+                />
+            </div>
+                </Row>
             </CardHeader>
             <Table className="align-items-center table-flush" responsive>
               <thead className="thead-light">
@@ -208,7 +247,7 @@ const StudentsCard = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {studentsData?.map((bus) => {
+                {dataToShow?.map((bus) => {
                   return (
                     <tr>
                       <td>{

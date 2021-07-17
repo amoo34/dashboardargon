@@ -37,6 +37,9 @@ const DriversCard = (props) => {
     const [driversData, setDriversData] = useState([]);
     const [editDriver, setEditDriver] = useState("");
   
+    const [driversDataFilter, setDriversDataFilter] = useState([]);
+    const [isFilter, setIsFilter] = useState(false);
+
     const [nameEdit,setNameEdit] = useState("");
     const [emailEdit,setEmailEdit] = useState("");
     const [bussNo,setBussNoEdit] = useState("");
@@ -123,6 +126,27 @@ const DriversCard = (props) => {
     };
 
   const toggle = () => setModal(!modal);
+  const handleSearch = async (value) => {
+    const abc = driversData;
+    if (value === "") {
+      const { data } = await axios.get("http://localhost:3001/dashtics/drivers");
+      setIsFilter(false);
+      setDriversData(data);
+    } else {
+      setIsFilter(true);
+      setDriversDataFilter(
+        driversData.filter(
+          (bus, id) =>
+            bus?.bussNo.includes(value) ||
+            bus?.email.includes(value) ||
+            bus?.name.includes(value)
+        )
+      );
+    }
+  };
+
+  const dataToShow = isFilter ? driversDataFilter : driversData;
+
 
   return(
     <div>    
@@ -195,7 +219,23 @@ const DriversCard = (props) => {
 <Header />
         <Card className="shadow">
               <CardHeader className="border-0">
-                <b>  Drivers Data </b>
+              <Row>
+            <div className="col-md-3">
+              {" "}
+              <b> Drivers Data </b>
+            </div>
+            <div className="col-md-6"></div>
+            <div className="col-md-3">
+              <Input
+                type="text"
+                id="search"
+                placeholder="Search Here"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+                />
+            </div>
+                </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -208,7 +248,7 @@ const DriversCard = (props) => {
                 </thead>
                 <tbody>
                   {
-                     driversData?.map(dr=>{
+                     dataToShow?.map(dr=>{
                        return <tr>
                        <td>
                          {
