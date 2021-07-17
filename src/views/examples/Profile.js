@@ -106,22 +106,18 @@ const Profile = () => {
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
+                    Punjab,Pakistan
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
+                    Frontend Developer
                   </div>
                   <div>
                     <i className="ni education_hat mr-2" />
-                    University of Computer Science
+                    University of Gujrat
                   </div>
                   <hr className="my-4" />
-                  <p>
-                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                    Nick Murphy — writes, performs and records all of his own
-                    music.
-                  </p>
+              
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     Show more
                   </a>
@@ -165,7 +161,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="lucky.jesse"
+                            defaultValue="laiba.atta"
                             id="input-username"
                             placeholder="Username"
                             type="text"
@@ -183,7 +179,7 @@ const Profile = () => {
                           <Input
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="jesse@example.com"
+                            placeholder="laiba.atta@gmail.com"
                             type="email"
                           />
                         </FormGroup>
@@ -200,9 +196,9 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Lucky"
+                            defaultValue="Laiba"
                             id="input-first-name"
-                            placeholder="First name"
+                            placeholder="first name"
                             type="text"
                           />
                         </FormGroup>
@@ -217,7 +213,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Jesse"
+                            defaultValue="Atta"
                             id="input-last-name"
                             placeholder="Last name"
                             type="text"
@@ -243,7 +239,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                            defaultValue="Gujrat,Punjab,Pakistan"
                             id="input-address"
                             placeholder="Home Address"
                             type="text"
@@ -262,7 +258,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="New York"
+                            defaultValue="Gujrat"
                             id="input-city"
                             placeholder="City"
                             type="text"
@@ -279,7 +275,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="United States"
+                            defaultValue="Pakistan"
                             id="input-country"
                             placeholder="Country"
                             type="text"
@@ -298,6 +294,7 @@ const Profile = () => {
                             className="form-control-alternative"
                             id="input-postal-code"
                             placeholder="Postal code"
+                            value="53780"
                             type="number"
                           />
                         </FormGroup>
@@ -314,8 +311,7 @@ const Profile = () => {
                         className="form-control-alternative"
                         placeholder="A few words about you ..."
                         rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                        Open Source."
+                        defaultValue="Frontend Developer."
                         type="textarea"
                       />
                     </FormGroup>

@@ -22,6 +22,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 
 const Login = () => {
+
+  {localStorage.getItem('user-token') !== null ?  window.location.href="/admin/index" : <></>}
+
+
   const handleSubmit=(e)=>{
     e.preventDefault();
 
@@ -47,6 +51,7 @@ const Login = () => {
                 hideProgressBar: true,
                 closeOnClick: true,
             });
+            localStorage.setItem('user-token','988jhfu$##R24rjiq943r4$$204dkf40')
             window.location="/admin/index";
 
         })

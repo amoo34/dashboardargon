@@ -16,7 +16,7 @@
 
 */
 import React, { useEffect, useState } from "react";
-import {Link, NavLink} from 'react-router-dom'
+import {Link, NavLink,Redirect} from 'react-router-dom'
 import axios from "axios";
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
@@ -37,14 +37,16 @@ const isShowStudents = window.location.href.includes("/showStudents");
 const isShowDrivers = window.location.href.includes("/showDrivers");
 
 
+{localStorage.getItem('user-token') === null ?  window.location.href="/auth/login" : <></>}
+
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
         <Container fluid>
           <div className="header-body">
             {/* Card stats */}
-            <Row hidden={isShowBusses || isShowStudents || isShowDrivers}>
-              <Col lg="6" xl="6">
+            <Row >
+              <Col lg="6" xl="6" hidden={isShowBusses || isShowDrivers}>
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -70,7 +72,7 @@ const isShowDrivers = window.location.href.includes("/showDrivers");
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="6">
+              <Col lg="6" xl="6" hidden={isShowStudents || isShowDrivers}>
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -98,9 +100,9 @@ const isShowDrivers = window.location.href.includes("/showDrivers");
               </Col>
             </Row>
 <br/><br/>
-            <Row hidden={isShowBusses || isShowStudents || isShowDrivers}>
+            <Row >
               
-            <Col lg="6" xl="6">
+            <Col lg="6" xl="6" hidden={isShowBusses || isShowStudents}>
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>

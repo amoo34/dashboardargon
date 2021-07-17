@@ -96,7 +96,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={(e) => {e.preventDefault();localStorage.removeItem('user-token',null); window.location.href="/auth/login"}}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

@@ -34,6 +34,9 @@ import {
 
 const BussesCard = (props) => {
   const [busesData, setBusesData] = useState([]);
+  const [busesDataFilter, setBusesDataFilter] = useState([]);
+  const [isFilter, setIsFilter] = useState(false);
+
   const [editBus, setEditBus] = useState("");
   const [modal, setModal] = useState(false);
 
@@ -80,7 +83,7 @@ const BussesCard = (props) => {
     setStartEdit(res[0].startingAddress);
     setDestinationEdit(res[0].endingAddress);
     setStartTimeEdit(res[0].startingTime);
-    setEndTimeEdit(res[0].endingTime)
+    setEndTimeEdit(res[0].endingTime);
     setModal(true);
   };
 
@@ -123,6 +126,29 @@ const BussesCard = (props) => {
   };
 
   const toggle = () => setModal(!modal);
+
+  const handleSearch = async (value) => {
+    const abc = busesData;
+    if (value === "") {
+      const { data } = await axios.get("http://localhost:3001/dashtics/buses");
+      setIsFilter(false);
+      setBusesData(data?.busesData);
+    } else {
+      setIsFilter(true);
+      setBusesDataFilter(
+        busesData.filter(
+          (bus, id) =>
+            bus?.busNumber.includes(value) ||
+            bus?.startingAddress.includes(value) ||
+            bus?.endingAddress.includes(value) ||
+            bus?.startingTime.includes(value) ||
+            bus?.endingTime.includes(value)
+        )
+      );
+    }
+  };
+
+  const dataToShow = isFilter ? busesDataFilter : busesData;
 
   return (
     <div>
@@ -224,7 +250,23 @@ const BussesCard = (props) => {
 
       <Card className="shadow">
         <CardHeader className="border-0">
-          <b> Buses Data </b>
+          <Row>
+            <div className="col-md-3">
+              {" "}
+              <b> Buses Data </b>
+            </div>
+            <div className="col-md-6"></div>
+            <div className="col-md-3">
+              <Input
+                type="text"
+                id="search"
+                placeholder="Search Here"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+              />
+            </div>
+          </Row>
         </CardHeader>
         <Table className="align-items-center table-flush" responsive>
           <thead className="thead-light">
@@ -238,7 +280,7 @@ const BussesCard = (props) => {
             </tr>
           </thead>
           <tbody>
-            {busesData?.map((bus) => {
+            {dataToShow?.map((bus) => {
               return (
                 <tr>
                   <td>{bus?.busNumber}</td>

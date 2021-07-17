@@ -47,12 +47,12 @@ const Maps = () => {
                       console.log(bus)
                       return <Marker
                       key={idx}
-                      title="Bus Number "
+                      title={`Bus Number: ${bus.busNumber} \nStarting Address : ${bus.startingAddress}\nEnding Address: ${bus.endingAddress}`}
                       name={'Dolores park'}
                       position={{lat:parseFloat(bus?.startingPoint?.lat),lng:parseFloat(bus?.startingPoint?.lng)}}
-                    >
-                      <InfoWindow>sasa</InfoWindow>
-                      </Marker>
+                    />
+                      {/* <InfoWindow>sasa</InfoWindow> */}
+                      {/* </Marker> */}
                     })
                     
                   }
