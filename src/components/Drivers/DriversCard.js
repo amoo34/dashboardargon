@@ -7,33 +7,192 @@ import React, { useEffect, useState } from 'react'
 * @function DriversCard
 **/
 import {
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-    NavItem,
-    NavLink,
-    Nav,
-    Progress,
-    Table,
-    Container,
-    Row,
-    Col,
-  } from "reactstrap";
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  NavItem,
+  NavLink,
+  Nav,
+  Progress,
+  Table,
+  Container,
+  Row,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  Label,
+  Input,
+  ModalBody,
+  Form,
+  FormGroup,
+
+} from "reactstrap";
+
+import Swal from "sweetalert2";
 const DriversCard = (props) => {
 
-    const [busesData, setBusesData] = useState([]);
-    const [editBus,setEditBus] = useState("")
+
+    const [driversData, setDriversData] = useState([]);
+    const [editDriver, setEditDriver] = useState("");
+  
+    const [nameEdit,setNameEdit] = useState("");
+    const [emailEdit,setEmailEdit] = useState("");
+    const [bussNo,setBussNoEdit] = useState("");
+
+    const [busses,setBusesData] = useState([]);
+  
+    const [modal,setModal] = useState(false);
+
     useEffect(()=>{
       const fetchDash =async()=>{
         const {data} = await axios.get("http://localhost:3001/dashtics/drivers")
-        setBusesData(data)
+        const busses = await axios.get("http://localhost:3001/dashtics/buses");
+        setBusesData(busses?.data?.busesData);
+        setDriversData(data)
+
       }
       fetchDash()
     },[])
 
+    const handleEdit = (id) => {
+      const res = driversData.filter((b, i) => b._id == id);
+      setEditDriver(id);
+      setNameEdit(res[0].name)
+      setEmailEdit(res[0].email);
+      setBussNoEdit(res[0].bussNo);
+      setModal(true);
+    };
+  
+    const updateDriver = async (id) => {
+      try {
+        await axios.patch(`http://localhost:3001/dashtics/drivers`, {
+          id: id,
+          bussNo:bussNo,
+          name: nameEdit,
+          email: emailEdit
+        });
+        const { data } = await axios.get("http://localhost:3001/dashtics/drivers");
+        console.log(data)
+        setDriversData(data);
+        setModal(false);
+        Swal.fire("Updated!", "Record has been Updated.", "success");
+      } catch (error) {
+        Swal.fire("Failure!", "Something went wrong.", "error");
+        console.log(error);
+      }
+    };
+  
+    
+    const handleDelete = (id) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const data = {
+            id: id,
+          };
+          await axios
+            .post("http://localhost:3001/dashtics/drivers/delete", data)
+            .then(async () => {
+              const { data } = await axios.get(
+                "http://localhost:3001/dashtics/drivers"
+              );
+              setDriversData(data);
+              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              setEditDriver("");
+              setNameEdit("");
+              setEmailEdit("");
+              setBussNoEdit("");
+            })
+            .catch(() => {
+              setEditDriver("");
+              setNameEdit("");
+              setEmailEdit("");
+              Swal.fire("Failure!", "Something went wrong.", "error");
+            });
+        }
+      });
+    };
+
+  const toggle = () => setModal(!modal);
+
   return(
-    <div>    <Header />
+    <div>    
+         <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Edit Driver</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label className="font-weight-bold" for="exampleEmail">
+                Buss Number
+              </Label>
+              <Input type="select" name="select" id="exampleSelect" onChange={(e)=>{setBussNoEdit(e.target.value)}}>
+               {
+                 busses.map((bus,id)=> {return(<option name="val" selected={bus.busNumber}>{bus.busNumber}</option>)})
+               } 
+              </Input>
+
+              <br />
+              <Label className="font-weight-bold" for="exampleEmail">
+                Name
+              </Label>
+              <Input
+                type="text"
+                name="name"
+                value={nameEdit}
+                onChange={(e) => {
+                  setNameEdit(e.target.value);
+                }}
+                placeholder="enter cnic"
+              />
+              <br />
+              <Label className="font-weight-bold" for="exampleEmail">
+                Email
+              </Label>
+              <Input
+                type="email"
+                name="email"
+                value={emailEdit}
+                onChange={(e) => {
+                  setEmailEdit(e.target.value);
+                }}
+                placeholder="enter email"
+              />
+        
+              <br />
+              
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="btn btn-primary"
+            onClick={() => {
+              updateDriver(editDriver);
+            }}
+            disabled={
+              bussNo === "" ||
+              nameEdit === "" ||
+              emailEdit === ""
+            }
+          >
+            Update
+          </Button>{" "}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+<Header />
         <Card className="shadow">
               <CardHeader className="border-0">
                 <b>  Drivers Data </b>
@@ -49,18 +208,33 @@ const DriversCard = (props) => {
                 </thead>
                 <tbody>
                   {
-                     busesData?.map(dr=>{
+                     driversData?.map(dr=>{
                        return <tr>
                        <td>
-                         {editBus === dr?._id ?
-                         <input type="text"  />
-                         : 
+                         {
                          dr?.name}
                          </td>
                        <td>{dr?.email}</td>
                        <td>{dr?.bussNo}</td>
-                       <td><button className="btn btn-info" onClick={()=>setEditBus(dr?._id)} >Edit</button></td>
-                     </tr>
+                       <td>
+                        <button
+                          className="btn btn-info"
+                          onClick={() => {
+                            handleEdit(dr._id);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-warning"
+                          onClick={() => {
+                            handleDelete(dr._id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                      </tr>
                      })
                   }
                   

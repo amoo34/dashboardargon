@@ -3,7 +3,7 @@ import React from "react";
 
 // reactstrap components
 import { Card, Container, Row } from "reactstrap";
-import { GoogleMap, LoadScript,Marker  } from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, LoadScript,Marker  } from '@react-google-maps/api';
 // core components
 import Header from "components/Headers/Header.js";
 import axios from 'axios';
@@ -50,7 +50,9 @@ const Maps = () => {
                       title="Bus Number "
                       name={'Dolores park'}
                       position={{lat:parseFloat(bus?.startingPoint?.lat),lng:parseFloat(bus?.startingPoint?.lng)}}
-                      />
+                    >
+                      <InfoWindow>sasa</InfoWindow>
+                      </Marker>
                     })
                     
                   }
